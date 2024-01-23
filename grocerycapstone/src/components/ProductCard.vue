@@ -1,40 +1,25 @@
 <template>
-
-    <div>
-        <h1>Hello!</h1>
+    <div class="box">
+        <img :src="item.image" />
+        <h3>{{item.name}}</h3>
+        <span>{{item.price}}</span>
+        <br>
+        <button class="btn" @click="addToCart">Add to cart</button>
     </div>
 </template>
 
-<script setup lang="ts">
-import { defineAsyncComponent, onMounted } from 'vue';
-import { useCartStore } from '../stores/cart'
-import {storeToRefs} from 'pinia'
+<script setup>
+import { useCartStore } from '@/stores/cart';
 
-
-interface Product {
-    imageSrc: string;
-    imageAlt: string;
-    href: string;
-    name: string;
-    color: string;
-    currency: string;
-    price: string;
-    id: number;
-}
-
-const props = defineProps<{
-    product: Product;
-}>();
+const props = defineProps(['item']);
+console.log(props.item)
 
 const cartStore = useCartStore()
-const {cart} = storeToRefs(cartStore)
-onMounted(()=>{
-    cartStore.loadCartInstance()
-})
 
-function addToCart(){
-cartStore.addToCart({id: props.product.id, qty: 1})
-console.log("cart", cart.value)
+function addToCart() {
+    cartStore.state.cart.push(props.item)
 }
-
 </script>
+
+<style scoped>
+</style>
